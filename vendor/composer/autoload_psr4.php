@@ -19,6 +19,7 @@ return array(
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
+    'App\\Router\\' => array($vendorDir . '/mrsems/router-php/src'),
     'AppDAF\\SERVICE\\' => array($baseDir . '/src/service'),
     'AppDAF\\REPOSITORY\\' => array($baseDir . '/src/repository'),
     'AppDAF\\ENUM\\' => array($baseDir . '/src/enum'),

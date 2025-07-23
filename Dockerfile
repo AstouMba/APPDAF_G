@@ -35,6 +35,6 @@ COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY supervisord.conf /etc/supervisord.conf
 
 # Exposer le port
-EXPOSE 80
+EXPOSE 81
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

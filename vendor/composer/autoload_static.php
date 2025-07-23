@@ -46,6 +46,7 @@ class ComposerStaticInite5a80b9228b8563bc77667253d4263be
         ),
         'A' => 
         array (
+            'App\\Router\\' => 11,
             'AppDAF\\SERVICE\\' => 15,
             'AppDAF\\REPOSITORY\\' => 18,
             'AppDAF\\ENUM\\' => 12,
@@ -109,6 +110,10 @@ class ComposerStaticInite5a80b9228b8563bc77667253d4263be
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
+        ),
+        'App\\Router\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mrsems/router-php/src',
         ),
         'AppDAF\\SERVICE\\' => 
         array (
