@@ -2,9 +2,34 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Dotenv\Dotenv;
 use Cloudinary\Cloudinary;
 use Cloudinary\Configuration\Configuration;
 
+// Chargement des variables d'environnement
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+if (!isset($_ENV['DATABASE_URL'])) {
+    die("❌ La variable DATABASE_URL n'est pas définie dans .env\n");
+}
+
+// Parse DATABASE_URL
+$parts = parse_url($_ENV['DATABASE_URL']);
+if (!$parts || !isset($parts['host'], $parts['user'], $parts['pass'], $parts['path'], $parts['port'])) {
+    die("❌ La variable DATABASE_URL n'est pas valide.\n");
+}
+
+$driver = 'pgsql'; // Railway utilise PostgreSQL
+$host = $parts['host'];
+$port = $parts['port'];
+$user = $parts['user'];
+$password = $parts['pass'];
+$dbName = ltrim($parts['path'], '/');
+
+$dsn = "$driver:host=$host;port=$port;dbname=$dbName";
+
+// Configuration Cloudinary
 $cloud = require __DIR__ . '/../app/config/cloudinary.php';
 
 Configuration::instance([
@@ -18,27 +43,18 @@ Configuration::instance([
 
 $cloudinary = new Cloudinary(Configuration::instance());
 
-$password ='UltaL4FWQaZK7Mp2iDyhjvFi2c72hm6z';
-$host = 'dbdpg-d1vtklili9vc73fs75bg-a.oregon-postgres.render.com';
-$port = '5432';
-$driver = 'pgsql';
-$dbName = 'appdaf_2txm';
-$user = 'appdaf_2txm_user
-';
-
-$dsn = "$driver:host=$host;port=$port;dbname=$dbName";
-
-
 try {
-    echo "🔗 Connexion à la base...\n";
+    echo "🔗 Connexion à la base via DATABASE_URL...\n";
     $pdo = new PDO($dsn, $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "✅ Connexion réussie à la base de données\n\n";
 
+    // Vider les tables
     $pdo->exec("DELETE FROM log;");
     $pdo->exec("DELETE FROM citoyen;");
     echo "♻️  Tables `citoyen` et `log` vidées avec succès.\n\n";
 
+    // Données citoyens à insérer
     $citoyens = [
         [
             'nom' => 'Gueye',
@@ -69,6 +85,7 @@ try {
         ],
     ];
 
+    // Upload images et insertion en base
     foreach ($citoyens as $citoyen) {
         try {
             $pathRecto = __DIR__ . '/images/' . $citoyen['recto'];
